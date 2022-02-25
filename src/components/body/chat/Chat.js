@@ -60,7 +60,7 @@ export class Chat extends React.Component {
     }
 
     loadChannels = async () => {
-        fetch('http://localhost:9800/getChannels').then(async response => {
+        fetch('https://slacko-chat.herokuapp.com//getChannels').then(async response => {
             let data = await response.json();
             this.setState({ channels: data.channels });
         })
