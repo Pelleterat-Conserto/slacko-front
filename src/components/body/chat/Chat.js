@@ -103,7 +103,7 @@ const Chat = () => {
         testVar = 'test2';
         console.log("HERE setting testvar to: ", testVar)
         //dispatch(addSocket(_socket));
-    }, [stateChannels]);
+    }, []);
 
     const handleSendMessage = (channel_id, text) => {
         console.log("HERE: handleSendMessage")
