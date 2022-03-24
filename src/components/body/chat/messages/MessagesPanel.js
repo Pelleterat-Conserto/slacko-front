@@ -1,46 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Message } from './Message';
 
-export class MessagesPanel extends React.Component {
+export const MessagesPanel = ({onSendMessage, channel}) => {
 
-    state = { input_value: '' }
+    const [inputValue, setInputValue ] = useState('');
+    const [, updateState] = React.useState();
+    const forceUpdate = React.useCallback(() => updateState({}), []);
     
-    send = () => {
-        if (this.state.input_value && this.state.input_value !== '') {
-            //console.log("HERE send ", this.props.channel.id, this.state.input_value)
-            this.props.onSendMessage(this.props.channel.id, this.state.input_value);
-            this.setState({ input_value: '' });
+    const send = () => {
+        if (inputValue && inputValue !== '') {
+            onSendMessage(channel.id, inputValue);
+            setInputValue('');
+            forceUpdate();
         }
     }
 
-    handleInput = e => {
-        this.setState({ input_value: e.target.value });
+    const handleInput = e => {
+        setInputValue(e.target.value);
     }
 
-    handleKey = e => {
+    const handleKey = e => {
         if (e.charCode === 13 || e.code === "Enter" || e.key === "Enter") {
-            this.send();
+            send();
         }
     }
 
-    render() {
-        let list = <div className="no-content-message">There is no messages to show</div>;
-        if (this.props.channel && this.props.channel.messages) {
-            list = this.props.channel.messages.map(m => <Message key={m.id} id={m.id} senderName={m.senderName} text={m.text} />);
-        };
+    let list = <div className="no-content-message">There is no messages to show</div>;
+    
+    if (channel && channel.messages) {
+        list = channel.messages.map(m => <Message key={m.id} id={m.id} senderName={m.senderName} text={m.text} />);
+    };
 
-        console.log("HERE in message panel, props.channel: ", this.props.channel)
+    console.log("HERE in message panel, props.channel: ", channel)
 
-        return (
-            <div className='messages-panel'>
-                <div className="messages-list">{list}</div>
-                {this.props.channel &&
-                    <div className="messages-input">
-                        <input type="text" onChange={this.handleInput} onKeyPress={this.handleKey} value={this.state.input_value} />
-                        <button onClick={this.send}>Send</button>
-                    </div>
-                }
-            </div>);
-    }
-
+    return (
+        <div className='messages-panel'>
+            <div className="messages-list">{list}</div>
+            {channel &&
+                <div className="messages-input">
+                    <input type="text" onChange={handleInput} onKeyPress={handleKey} value={inputValue} />
+                    <button onClick={send}>Send</button>
+                </div>
+            }
+        </div>);
 }
