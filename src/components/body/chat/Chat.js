@@ -18,7 +18,7 @@ import { store } from '../../redux/object/store';
 const localServer = "http://localhost:3000";
 const herokuserver = "https://pacific-sierra-45747.herokuapp.com";
 
-const SERVER = localServer;
+const SERVER = herokuserver;
 
 const Chat = ({ username }) => {
 
