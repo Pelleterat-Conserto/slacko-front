@@ -1,0 +1,15 @@
+.id-modal {
+    background-color: #fefefe;
+    width: 30%;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    border-radius: 5px;
+
+}
+
+.id-modal > input,
+.id-modal > button {
+    font-size: 2em;
+}

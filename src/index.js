@@ -4,12 +4,12 @@ import './index.css';
 import App from './components/app/App';
 import reportWebVitals from './reportWebVitals';
 
-//import store from './components/redux/hooks/store';
+import store from './components/redux/hooks/store';
 import { Provider } from 'react-redux';
-import {store as objectStore} from './components/redux/object/store';
+//import {store as objectStore} from './components/redux/object/store';
 
 ReactDOM.render(
-  <Provider store={objectStore}>
+  <Provider store={store}>
     <App />
   </Provider>,
   document.getElementById('root')

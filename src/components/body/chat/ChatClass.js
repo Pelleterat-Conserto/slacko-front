@@ -3,7 +3,7 @@ import React from 'react';
 import socketClient from "socket.io-client";
 
 import { connect } from 'react-redux'
-import { addChannels, addChannel, addSocket } from '../../redux/object/actions/actions'
+import { addChannels, addCurrentChannel, addSocket } from '../../redux/object/actions/actions'
 
 import './chat.css';
 import { ChannelList } from './ChannelList';
@@ -84,7 +84,7 @@ class Chat extends React.Component {
 
     handleSendMessage = (channel_id, text) => {
         console.log("HERE handleSendMessage data: ", channel_id, text)
-        this.socket.emit('send-message', { channel_id, text, senderName: this.socket.id, id: Date.now() });
+        this.socket.emit('send-message', { channel_id, text, senderName: this.props.username, id: Date.now() });
     }
 
     render() {
@@ -115,7 +115,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return {
         updateChannels: (channels) => dispatch(addChannels(channels)),
-        updateCurrentChannel: (channel) => dispatch(addChannel(channel)),
+        updateCurrentChannel: (channel) => dispatch(addCurrentChannel(channel)),
         updateSocket: (socket) => dispatch(addSocket(socket))
     }
 }

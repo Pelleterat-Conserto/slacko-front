@@ -6,9 +6,15 @@ export const channelSlice = createSlice({
         channel: undefined,
     },
     reducers: {
-        addChannel: (state, action) =>  action.payload
+        addCurrentChannel: (state, action) => {
+            console.log("HERE channelSlice action: ", action)
+            return {
+                ...state,
+                channel: action.payload
+            }
+        }
     }
 });
 
-export const { addChannel } = channelSlice.actions;
+export const { addCurrentChannel } = channelSlice.actions;
 export default channelSlice.reducer;

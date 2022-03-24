@@ -12,7 +12,7 @@ export const addChannels = (content) => {
   ]
 })}
 
-export const addChannel = (content) => {
+export const addCurrentChannel = (content) => {
   const channel = content;
   console.log("HERE addChannel: channel: ", channel);
   return ({

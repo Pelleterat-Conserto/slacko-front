@@ -8,7 +8,6 @@ export class Channel extends React.Component {
     }
 
     render() {
-        console.log("HERE Channel this props: ", this.props)
         return (
             <div className='channel-item' onClick={this.click}>
                 <div>{this.props.name}</div>

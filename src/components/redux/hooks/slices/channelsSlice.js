@@ -8,6 +8,7 @@ export const channelsSlice = createSlice({
     },
     reducers: {
         addChannels: (state, action) => {
+            console.log("HERE: addChannels: action: ", action)
             const currentChannels = current(state).channels;
             const payloadChannels = action.payload;
             const channels = payloadChannels.filter(channel => !currentChannels.find(element => element.id !== channel.id));

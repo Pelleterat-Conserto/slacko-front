@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import socketClient from "socket.io-client";
 
 import { useSelector, useDispatch } from 'react-redux';
 import { addChannels } from '../../redux/hooks/slices/channelsSlice';
-import { addChannel } from '../../redux/hooks/slices/channelSlice';
+import { addCurrentChannel } from '../../redux/hooks/slices/channelSlice';
 
 import './chat.css';
 import { ChannelList } from './ChannelList';
@@ -21,51 +21,57 @@ const Chat = () => {
     const dispatch = useDispatch();
     const stateChannels = useSelector((state) => state.channels);
     const stateChannel = useSelector((state) => state.channel);
-    const stateSocket = useSelector((state) => state.socket);
     const user = useSelector((state) => state.user);
 
-    let socket;
+    const socket = useRef(undefined);
+    let testVar = 'test1';
 
     const handleChannelSelect = id => {
-        console.log("HERE: handleChannelSelect, id: ", id)
+        console.log("HERE handleChannelSelect")
         let channel = stateChannels.channels.find(c => {
             return c.id === id;
         });
         //setState({ channel });
-        dispatch(addChannel(channel));
-        stateSocket.socket.emit('channel-join', id, ack => {
+        dispatch(addCurrentChannel(channel));
+        //const value = socket.current;
+        socket.current.emit('channel-join', id, ack => {
         });
     }
 
+    const handleChannel = channel => {
+        console.log("HERE handleChannel channel: ", channel)
+        console.log("HERE test: ", testVar)
+        console.log("HERE in handleChannel: stateChannels: ", stateChannels)
+        console.log("HERE in handleChannel stateChannel: ", stateChannel)
+        let channels = stateChannels.channels;
+        console.log("HERE in handleChannel channels: ", channels)
+        if (Array.isArray(channels)) {
+            channels.forEach(c => {
+                console.log("HERE c: ", c)
+                if (c.id === stateChannel.channel.id) {
+                    c.participants = channel.participants;
+                }
+            });
+            console.log("HERE: channels: ", channels)
+            dispatch(addChannels(channels));
+        }
+    }
 
-    useEffect(() => {
-
-        fetch(`${SERVER}/getChannels`)
-        .then(response => response.json())
-        .then( async (responseJson) => {
-            let data = responseJson;
-            dispatch(addChannels(data.channels))
-        })
-
+    const configureSocket = () => {
+        console.log("HERE configureSocket")
         const _socket = socketClient(SERVER);
+
         _socket.on('connection', () => {
+            console.log("HERE _socket.on('connection'")
             if (stateChannel.channel) {
                 handleChannelSelect(stateChannel.channel.id);
             }
         });
-        _socket.on('channel', channel => {
-            let channels = stateChannels.channels;
-            if (Array.isArray(channels)) {
-                channels.forEach(c => {
-                    if (c.id === channel.id) {
-                        c.participants = channel.participants;
-                    }
-                });
-                dispatch(addChannels(channels));
-            }
-        });
+
+        _socket.on('channel', handleChannel);
 
         _socket.on('message', message => {
+            console.log("HERE _socket.on('message'")
             let channels = stateChannels.channels;
             if (Array.isArray(channels)) {
                 channels.forEach(c => {
@@ -80,16 +86,33 @@ const Chat = () => {
                 dispatch(addChannels(channels));
             }
         });
-        socket = _socket;
+        socket.current = _socket;
+    }
+
+    useEffect(() => {
+
+        fetch(`${SERVER}/getChannels`)
+        .then(response => response.json())
+        .then( async (responseJson) => {
+            let data = responseJson;
+            dispatch(addChannels(data.channels))
+        })
+
+        configureSocket();
+
+        testVar = 'test2';
+        console.log("HERE setting testvar to: ", testVar)
         //dispatch(addSocket(_socket));
-}, []);
+    }, [stateChannels]);
 
     const handleSendMessage = (channel_id, text) => {
+        console.log("HERE: handleSendMessage")
         socket.emit('send-message', { channel_id, text, senderName: user.user, id: Date.now() });
     }
 
-    console.log("HERE test stateChannels: ", stateChannels)
-    console.log("HERE test stateChannel: ", stateChannel)
+    console.log("HERE test: ", testVar)
+    console.log("HERE render stateChannels: ", stateChannels)
+    console.log("HERE render stateChannel: ", stateChannel)
 
     return (
         <div className='chat-app'>

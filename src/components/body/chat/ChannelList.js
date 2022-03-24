@@ -8,10 +8,9 @@ export class ChannelList extends React.Component {
     }
 
     render() {
-        //console.log("HERE ChannelList render this.props: ", this.props)
         let list = <div className="no-content-message">There is no channels to show</div>;
         if (this.props.channels && this.props.channels.length) {
-            list = this.props.channels.map(c => <Channel key={c.id} id={c.id} name={c.name} participants={c.participants} onClick={this.handleClick} />);
+            list = this.props.channels.map(c => <Channel key={c.id} id={c.id} name={c.name} participants={c.participants} onClick={() => this.handleClick(c.id)} />);
         }
         return (
             <div className='channel-list'>

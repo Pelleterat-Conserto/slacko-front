@@ -6,7 +6,10 @@ export const socketSlice = createSlice({
         socket: undefined,
     },
     reducers: {
-        addSocket: (state, action) =>  action.payload
+        addSocket: (state, action) => {
+            console.log("HERE: addSocket: action: ", action);
+            return action.payload;
+        }
     }
 });
 

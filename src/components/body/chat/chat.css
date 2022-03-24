@@ -97,3 +97,27 @@
     padding: 10px;
     margin: 10px;
 }
+
+.message-item-container {
+    width: 100%;
+    display: flex;
+    margin: 10px;
+}
+
+.message-item-left {
+    width: 60%;
+    align-self: flex-start;
+    background-color: white;
+    border-radius: 5px;
+    text-align: left;
+    padding: 5px;
+}
+
+.message-item-right {
+    width: 60%;
+    align-self: flex-end;
+    background-color: white;
+    border-radius: 5px;
+    text-align: left;
+    padding: 5px;
+}
