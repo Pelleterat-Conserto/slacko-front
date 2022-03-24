@@ -3,7 +3,7 @@ import React from 'react';
 import socketClient from "socket.io-client";
 
 import { connect } from 'react-redux'
-import { addChannels, addCurrentChannel, addSocket } from '../../redux/object/actions/actions'
+import { addChannels, addCurrentChannel, addSocket } from '../../redux/actions/actions'
 
 import './chat.css';
 import { ChannelList } from './ChannelList';
@@ -31,8 +31,8 @@ class Chat extends React.Component {
                 this.handleChannelSelect(this.props.channel.id);
             }
         });
+
         socket.on('channel', channel => {
-            
             let channels = this.props.channels;
 
             if (Array.isArray(channels)) {
@@ -41,7 +41,7 @@ class Chat extends React.Component {
                         c.participants = channel.participants;
                     }
                 });
-                // this.setState({ channels });
+                this.props.updateChannels(channels);
             }
         });
 
@@ -58,9 +58,10 @@ class Chat extends React.Component {
                         }
                     }
                 });
-                // this.setState({ channels });
+                this.props.updateChannels(channels);
             }
         });
+
         this.socket = socket;
     }
 
@@ -88,8 +89,6 @@ class Chat extends React.Component {
     }
 
     render() {
-        //console.log("HERE test!!!")
-        console.log("HERE test: this.props: ", this.props)
 
         //console.log("HERE test: this.handleChannelSelect: ", this.handleChannelSelect)
         //console.log("HERE test: this.handleSendMessage: ", this.handleSendMessage)

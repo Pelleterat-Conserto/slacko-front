@@ -1,4 +1,6 @@
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk'
+
 
 import {
     ADD_CHANNELS,
@@ -16,14 +18,17 @@ export const reducer = (state = initialState, action) => {
     switch (action.type) {
 
         case ADD_CHANNELS:
-            console.log("HERE: ADD_CHANNELS");
+            console.log("HERE: ADD_CHANNELS state: ", state);
+            console.log("HERE: ADD_CHANNELS action: ", action);
+            const channels = action.payload;
             return {
                 ...state,
-                channels: action.payload
+                channels
             }
 
         case ADD_CHANNEL:
-            console.log("HERE: ADD_CHANNEL");
+            console.log("HERE: ADD_CHANNEL state: ", state);
+            console.log("HERE: ADD_CHANNEL action: ", action);
             return {
                 ...state,
                 channel: action.payload
@@ -37,4 +42,4 @@ export const reducer = (state = initialState, action) => {
     }
 }
 
-export const store = createStore(reducer, initialState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+export const store = createStore(reducer, applyMiddleware(thunk));
