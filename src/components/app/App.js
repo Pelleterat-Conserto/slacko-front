@@ -17,7 +17,7 @@ const App = () => {
   return (
     <div className="App">
       {!username && inModal(IdModal, setName)}
-      <Head />
+      <Head username={username}/>
       <Body username={username}/>
     </div>
   );
