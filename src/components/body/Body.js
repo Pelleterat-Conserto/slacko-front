@@ -1,11 +1,9 @@
-//import Chat from './chat/ChatClass';
-import Chat from './chat/Chat';
 import './Body.css';
 
 export const Body = ({ username }) => {
   return (
     <div className="app-body">
-      <Chat username={username} />
+      Body
     </div>
   );
 }
