@@ -13,6 +13,7 @@ export const IdModal = ({ onValidate, ...passThroughProps }) => {
     
     return (
         <div className="id-modal">
+            <span>Type a name</span>
             <input placeholder="username" onChange={e => setName(e.target.value)} value={name}/>
             <button onClick={() => handleInput()}>Send</button>
         </div>
