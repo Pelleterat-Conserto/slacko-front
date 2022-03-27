@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Head } from '../head/Head';
 import { Body } from '../body/Body';
 
-import { inModal } from '../modal/modal';
+import { InModal } from '../modal/modal';
 import { IdModal } from '../id/id.modal.content';
 import './App.css';
 
@@ -14,9 +14,20 @@ const App = () => {
     setUsername(name);
   }
 
+  const cancel = e => {
+    console.log("HERE: Cancel")
+  }
+
   return (
     <div className="App">
-      {!username && inModal(IdModal, setName)}
+      {!username &&
+        <InModal
+          NestedComp={IdModal}
+          onValidate={setName}
+          onCancel={cancel}
+          anotherProp="another prop"
+          anotherOtherProp="another other prop"
+        />}
       <Head />
       <Body username={username}/>
     </div>

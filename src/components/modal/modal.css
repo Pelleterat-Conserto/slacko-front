@@ -5,7 +5,33 @@
     top: 0;
     width: 100%; /* Full width */
     height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding: auto 0;
+  }
+
+  .modal_container > .close_modal {
+    width: 100%;
+    text-align: right;
+    font-size: 2rem;
+    color: white;
+  }
+
+  .close_modal > span {
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin-right: 5px;
+  }
+
+  .modal > .modal_container {
+    width: 60%;
+    height: 60%;
+    margin: auto;
+    margin-top: 10%;
+  }
+
+  .modal_content {
+    background-color: white;
+    border-radius: 10px;;
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
   }

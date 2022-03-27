@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 import socketClient from "socket.io-client";
 
@@ -22,8 +22,11 @@ const SERVER = herokuserver;
 
 const Chat = ({ username }) => {
 
-    const [, updateState] = React.useState();
-    const forceUpdate = React.useCallback(() => updateState({}), []);
+    const channels = store.getState().channels;
+    const currentChannel = store.getState().channel;
+
+    const [, updateState] = useState();
+    const forceUpdate = useCallback(() => updateState({}), []);
 
     const refSocket = useRef(undefined);
 
@@ -118,13 +121,8 @@ const Chat = ({ username }) => {
         refSocket.current.emit('send-message', { channel_id, text, senderName: username, id: Date.now() });
     }
 
-    const channels = store.getState().channels;
-    const currentChannel = store.getState().channel;
     console.log("HERE render stateChannels: ", channels)
     console.log("HERE render stateChannel: ", currentChannel)
-
-    // const unsubscribe = store.subscribe(onSocketChannel)
-    // //unsubscribe()
 
     return (
         <div className='chat-app'>

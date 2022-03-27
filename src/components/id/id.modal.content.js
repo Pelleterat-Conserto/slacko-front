@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import './id.modal.content.css';
 
-export const IdModal = ({ action }) => {
+export const IdModal = ({ onValidate, ...passThroughProps }) => {
+
+    console.log("HERE: passThroughProps: ", passThroughProps)
 
     const [name, setName] = useState("");
 
     const handleInput = () => {
-        action(name)
+        onValidate(name)
     };
     
     return (
