@@ -1,9 +1,9 @@
 import './Head.css';
 
-export const Head = () => {
+export const Head = ({ username }) => {
   return (
     <div className="app-head">
-      HEAD
+      {username && username.length > 0 ? username : "HEAD"}
     </div>
   );
 }

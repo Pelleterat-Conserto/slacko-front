@@ -28,7 +28,7 @@ const App = () => {
           anotherProp="another prop"
           anotherOtherProp="another other prop"
         />}
-      <Head />
+      <Head username={username}/>
       <Body username={username}/>
     </div>
   );
