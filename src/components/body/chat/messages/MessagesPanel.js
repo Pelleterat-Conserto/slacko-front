@@ -30,9 +30,7 @@ export const MessagesPanel = ({onSendMessage, channel}) => {
     if (channel && channel.messages) {
         list = channel.messages.map(m => <Message key={m.id} id={m.id} senderName={m.senderName} text={m.text} />);
     };
-
-    console.log("HERE in message panel, props.channel: ", channel)
-
+    
     return (
         <div className='messages-panel'>
             <div className="messages-list">{list}</div>

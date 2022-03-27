@@ -1,15 +1,18 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { ChannelList } from './ChannelList';
-import './chat.css';
-import { MessagesPanel } from './messages/MessagesPanel';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+
 import socketClient from "socket.io-client";
+
+import './chat.css';
+import { ChannelList } from './ChannelList';
+import { MessagesPanel } from './messages/MessagesPanel';
+
 
 const localServer = "http://localhost:3000";
 const herokuserver = "https://pacific-sierra-45747.herokuapp.com";
 
-const SERVER = herokuserver;
+const SERVER = localServer;
 
-export const Chat = () => {
+const Chat = ({ username }) => {
 
     const [stateChannels, setStateChannels] = useState();
     const [stateCurrentChannel, setStateCurrentChannel] = useState();
@@ -17,36 +20,32 @@ export const Chat = () => {
     const [, updateState] = useState();
     const forceUpdate = useCallback(() => updateState({}), []);
 
-    let currentSocket;
+    const refSocket = useRef(undefined);
 
-    useEffect(() => {
-        loadChannels();
-        configureSocket();
+    const getChannels = () => stateChannels;
 
-    }, [currentSocket]);
-
-    const configureSocket = () => {
-        var socket = socketClient(SERVER);
-
-        socket.on('connection', () => {
-            if (stateCurrentChannel) {
-                handleChannelSelect(stateCurrentChannel.id);
-            }
+    const handleChannelSelect = id => {
+        console.log("HERE: handleChannelSelect, id: ", id)
+        let channel = stateChannels.find(c => {
+            return c.id === id;
         });
 
-        socket.on('channel', channel => {
-            let channels = stateChannels;
-            channels.forEach(c => {
-                if (c.id === channel.id) {
-                    c.participants = channel.participants;
-                }
-            });
-            setStateChannels(channels);
-            forceUpdate();
-        });
+        setStateCurrentChannel({channel})
 
-        socket.on('message', message => {
-            let channels = stateChannels;
+        refSocket.current.emit('channel-join', id, ack => {
+        });      
+    }
+
+    const onSocketConnection = () => {
+        if (stateCurrentChannel) {
+            handleChannelSelect(stateCurrentChannel.id);
+        }
+    };
+
+    const onSocketMessage = message => {
+        console.log("HERE OnMessage: ", message)
+        let channels = stateChannels;
+        if (Array.isArray(channels)) {
             channels.forEach(c => {
                 if (c.id === message.channel_id) {
                     if (!c.messages) {
@@ -56,32 +55,52 @@ export const Chat = () => {
                     }
                 }
             });
-            setStateChannels(channels);
-            forceUpdate();
-        });
+            setStateChannels(channels, forceUpdate)
+        }
+    };
 
-        currentSocket = socket;
-    }
+    useEffect(() => {
 
-    const loadChannels = async () => {
-        fetch(`${SERVER}/getChannels`).then(async response => {
-            let data = await response.json();
+        fetch(`${SERVER}/getChannels`)
+        .then(response => response.json())
+        .then( async (responseJson) => {
+            let data = responseJson;
             setStateChannels(data.channels);
         })
-    }
 
-    const handleChannelSelect = id => {
-        let channel = stateChannels.find(c => {
-            return c.id === id;
-        });
-        setStateCurrentChannel(channel)
-        currentSocket.emit('channel-join', id, ack => {
-        });
-    }
+        const _socket = socketClient(SERVER);
+
+        _socket.on('connection', onSocketConnection);
+
+        _socket.on('channel', onSocketChannel);
+
+        _socket.on('message', onSocketMessage);
+
+        refSocket.current = _socket;
+
+    }, []);
 
     const handleSendMessage = (channel_id, text) => {
-        currentSocket.emit('send-message', { channel_id, text, senderName: currentSocket.id, id: Date.now() });
+        //console.log("HERE handleSendMessage")
+        refSocket.current.emit('send-message', { channel_id, text, senderName: username, id: Date.now() });
     }
+
+    console.log("HERE render stateChannels: ", stateChannels)
+    console.log("HERE render stateChannel: ", stateCurrentChannel)
+
+    const onSocketChannel = channel => {
+        console.log("HERE onSocketChannel: ", channel, stateChannels)
+        let channels = getChannels();
+        console.log("HERE onSocketChannel: ", channel, stateChannels)
+        if (Array.isArray(channels)) {
+            channels.forEach(c => {
+                if (c.id === channel.id) {
+                    c.participants = channel.participants;
+                }
+            });
+            setStateChannels(channels, forceUpdate)
+        }
+    };
 
     return (
         <div className='chat-app'>
@@ -89,4 +108,6 @@ export const Chat = () => {
             <MessagesPanel onSendMessage={handleSendMessage} channel={stateCurrentChannel} />
         </div>
     );
-}
+};
+
+export default Chat;
