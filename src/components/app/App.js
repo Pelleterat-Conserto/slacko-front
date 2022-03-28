@@ -18,6 +18,8 @@ const App = () => {
     console.log("HERE: Cancel")
   }
 
+  console.log("HERE: username: ", username)
+
   return (
     <div className="App">
       {!username &&
@@ -28,7 +30,7 @@ const App = () => {
           anotherProp="another prop"
           anotherOtherProp="another other prop"
         />}
-      <Head />
+      <Head username={username}/>
       <Body username={username}/>
     </div>
   );

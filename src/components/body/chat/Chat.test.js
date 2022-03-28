@@ -32,7 +32,7 @@ describe('Chat', () => {
     render(<Chat />);
 
     await waitFor(() => {
-        expect(screen.getByText('General')).toBeInTheDocument() // Nope. The component is still not updated
+        expect(screen.getByText('General')).toBeInTheDocument() // Nope. The component is still not update
       })
 
     expect(window.fetch).toHaveBeenCalledTimes(1);
