@@ -4,14 +4,11 @@ import { Message } from './Message';
 export const MessagesPanel = ({onSendMessage, channel}) => {
 
     const [inputValue, setInputValue ] = useState('');
-    const [, updateState] = React.useState();
-    const forceUpdate = React.useCallback(() => updateState({}), []);
     
     const send = () => {
         if (inputValue && inputValue !== '') {
             onSendMessage(channel.id, inputValue);
             setInputValue('');
-            forceUpdate();
         }
     }
 
@@ -30,8 +27,6 @@ export const MessagesPanel = ({onSendMessage, channel}) => {
     if (channel && channel.messages) {
         list = channel.messages.map(m => <Message key={m.id} id={m.id} senderName={m.senderName} text={m.text} />);
     };
-
-    console.log("HERE in message panel, props.channel: ", channel)
 
     return (
         <div className='messages-panel'>

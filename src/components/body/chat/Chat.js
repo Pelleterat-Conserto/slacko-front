@@ -15,7 +15,7 @@ import { MessagesPanel } from './messages/MessagesPanel';
 import { store } from '../../redux/object/store';
 
 
-const localServer = "http://localhost:3000";
+const localServer = "http://localhost:3000"; //
 const herokuserver = "https://pacific-sierra-45747.herokuapp.com";
 
 const SERVER = herokuserver;
@@ -46,12 +46,6 @@ const Chat = ({ username }) => {
         refSocket.current.emit('channel-join', id, ack => {
         });      
     }
-
-    const onSocketConnection = () => {
-        if (store.getState().channel) {
-            handleChannelSelect(store.getState().channel.id);
-        }
-    };
 
     const onSocketChannel = channel => {
         console.log("HERE onSocketChannel: ", channel)
@@ -106,8 +100,6 @@ const Chat = ({ username }) => {
         })
 
         const _socket = socketClient(SERVER);
-
-        _socket.on('connection', onSocketConnection);
 
         _socket.on('channel', onSocketChannel);
 
