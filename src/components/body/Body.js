@@ -1,5 +1,5 @@
-//import Chat from './chat/ChatClass';
-import Chat from './chat/Chat';
+import Chat from './chat/ChatClass';
+//import Chat from './chat/Chat';
 import './Body.css';
 
 export const Body = ({ username }) => {

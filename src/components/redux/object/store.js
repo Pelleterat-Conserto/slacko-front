@@ -16,14 +16,12 @@ export const reducer = (state = initialState, action) => {
     switch (action.type) {
 
         case ADD_CHANNELS:
-            console.log("HERE: ADD_CHANNELS");
             return {
                 ...state,
                 channels: action.payload
             }
 
         case ADD_CHANNEL:
-            console.log("HERE: ADD_CHANNEL");
             return {
                 ...state,
                 channel: action.payload

@@ -4,7 +4,7 @@ export const ADD_SOCKET = 'addSocket';
 
 export const addChannels = (content) => {
   const channels = [...content];
-  console.log("HERE addChannels: channels: ", channels);
+  //console.log("HERE addChannels: channels: ", channels);
   return ({
   type: ADD_CHANNELS,
   payload: [
@@ -14,7 +14,7 @@ export const addChannels = (content) => {
 
 export const addCurrentChannel = (content) => {
   const channel = content;
-  console.log("HERE addChannel: channel: ", channel);
+  //console.log("HERE addChannel: channel: ", channel);
   return ({
   type: ADD_CHANNEL,
   payload: channel
@@ -22,7 +22,7 @@ export const addCurrentChannel = (content) => {
 
 export const addSocket = (content) => {
   const socket = content;
-  console.log("HERE addSocket: socket: ", socket);
+  //console.log("HERE addSocket: socket: ", socket);
   return ({
   type: ADD_SOCKET,
   payload: socket

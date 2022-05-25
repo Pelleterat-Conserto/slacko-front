@@ -3,8 +3,6 @@ import './id.modal.content.css';
 
 export const IdModal = ({ onValidate, ...passThroughProps }) => {
 
-    console.log("HERE: passThroughProps: ", passThroughProps)
-
     const [name, setName] = useState("");
 
     const handleInput = () => {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import socketClient from "socket.io-client";
+import SocketHandler from '../../utils/socketHandler';
 
 import { connect } from 'react-redux'
 import { addChannels, addCurrentChannel, addSocket } from '../../redux/object/actions/actions'
@@ -24,29 +24,26 @@ class Chat extends React.Component {
     }
 
     configureSocket = () => {
-        console.log("HERE configureSocket")
-        var socket = socketClient(SERVER);
-        socket.on('connection', () => {
+        this.socket = new SocketHandler(SERVER);
+
+        this.socket.setConnectionListener((response) => {
             if (this.props.channel) {
                 this.handleChannelSelect(this.props.channel.id);
             }
         });
-        socket.on('channel', channel => {
-            
-            let channels = this.props.channels;
 
+        this.socket.setChannelListener(channel => {
+            let channels = this.props.channels;
             if (Array.isArray(channels)) {
                 channels.forEach(c => {
                     if (c.id === channel.id) {
                         c.participants = channel.participants;
                     }
                 });
-                // this.setState({ channels });
             }
         });
 
-        socket.on('message', message => {
-            
+        this.socket.setMessageListener(message => {
             let channels = this.props.channels
             if (Array.isArray(channels)) {
                 channels.forEach(c => {
@@ -58,10 +55,8 @@ class Chat extends React.Component {
                         }
                     }
                 });
-                // this.setState({ channels });
             }
         });
-        this.socket = socket;
     }
 
     loadChannels = () => {
@@ -78,18 +73,15 @@ class Chat extends React.Component {
             return c.id === id;
         });
         this.props.updateCurrentChannel(channel);
-        this.socket.emit('channel-join', id, ack => {
-        });
+        this.socket.joinChannel(id);
     }
 
     handleSendMessage = (channel_id, text) => {
-        console.log("HERE handleSendMessage data: ", channel_id, text)
-        this.socket.emit('send-message', { channel_id, text, senderName: this.props.username, id: Date.now() });
+        this.socket.sendMessage(channel_id, text);
     }
 
     render() {
-        //console.log("HERE test!!!")
-        console.log("HERE test: this.props: ", this.props)
+        if (this.props.username && this.socket) this.socket.setUserName(this.props.username);
 
         //console.log("HERE test: this.handleChannelSelect: ", this.handleChannelSelect)
         //console.log("HERE test: this.handleSendMessage: ", this.handleSendMessage)
